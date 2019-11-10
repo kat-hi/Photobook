@@ -1,58 +1,61 @@
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 import java.io.File;
+
+// https://o7planning.org/de/11125/anleitung-javafx-menu
 
 public class MenuTab extends HBox {
 
-    public MenuTab(BorderPane root, Pos pos) {
-        root.getChildren().add(this);
-        Button fileBtn = new Button("open File");
-        Button directoryBtn = new Button("open Directory");
-        root.getChildren().add(fileBtn);
-        root.getChildren().add(directoryBtn);
-        this.setAlignment(position);
-    }
-    private void openResourceFile () {
-        fileBtn.setOnAction(event -> {
+    private Button fileBtn;
+    private Button dirBtn;
+
+    public MenuTab(BorderPane root, Stage stage) {
+        System.out.println("Create MenuTab");
+
+        MenuBar menu = new MenuBar();
+        // Create Menu
+        Menu mainMenu = new Menu("Menu");
+        Menu editMenu = new Menu("Edit");
+        Menu helpMenu = new Menu("Help");
+
+        // Create Menucontent
+        MenuItem importFile = new MenuItem("Import File");
+        MenuItem importDirectory = new MenuItem("Import Directory");
+        MenuItem exitItem = new MenuItem("Exit");
+        MenuItem helpItem = new MenuItem("Get Help");
+
+        mainMenu.getItems().addAll(importFile, importDirectory);
+        editMenu.getItems().add(exitItem);
+        helpMenu.getItems().add(helpItem);
+
+        menu.getMenus().addAll(mainMenu,editMenu,helpMenu);
+        this.getChildren().add(menu);
+        root.setTop(menu);
+
+        importFile.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             String filepath = fileChooser.showOpenDialog(stage).getPath();
             System.out.println(filepath);
             if(!filepath.equals("")){
-                Image image = new Image("file:"+filepath, 500, 500, true, true,true);
-                photoview.add(new ImageView(image), 3,1);
+                FxFrontend.photoview.addImage(0,0, filepath);
             }
         });
-    }
 
-    private void openDirectory () {
-        directoryBtn.setOnAction(event -> {
+        importDirectory.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle("load directory");
-            File selectedDirectory = directoryChooser.showDialog(stage);
-            File[] fileList = selectedDirectory.listFiles();
-            if (fileList != null) {
-                int colIndex = 0;
-                int rowIndex = 0;
-
-                for (File filepath : fileList) {
-                    System.out.println(filepath);
-                    Image image = new Image("file:"+filepath, 200,200,true,true,true);
-                    photoview.add(new ImageView(image), colIndex, rowIndex);
-
-                    colIndex+=1;
-                    if(colIndex == 5) {
-                        rowIndex+=1;
-                        colIndex = 0;
-                    }
-                }
-            }
+            File directoryPath = directoryChooser.showDialog(stage);
+            FxFrontend.photoview.addImages(directoryPath);
         });
     }
 }
