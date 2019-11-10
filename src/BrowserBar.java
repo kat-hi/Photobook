@@ -5,7 +5,7 @@ import javafx.scene.layout.VBox;
 public class BrowserBar extends VBox {
 
     public BrowserBar(BorderPane root, Pos position) {
-        root.getChildren().add(this);
+        root.setLeft(this);
         this.setAlignment(position);
     }
 }
