@@ -1,14 +1,16 @@
-import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 
-public class InfoBar extends HBox {
+public class InfoBar extends VBox {
 
-    private Stage stage;
+    public InfoBar(BorderPane root){
 
-    public InfoBar(BorderPane root, Pos position){
-        root.getChildren().add(this);
-        this.setAlignment(position);
+        root.setRight(this);
+        this.setStyle("-fx-background-color : black");
+        Button button = new Button("Test");
+        this.getChildren().add(button);
+
+        System.out.println("Create InfoBar");
     }
 }
