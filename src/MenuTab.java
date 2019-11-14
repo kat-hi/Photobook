@@ -4,7 +4,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,10 +20,15 @@ public class MenuTab extends HBox {
     private Button fileBtn;
     private Button dirBtn;
 
-    public MenuTab(BorderPane root, Stage stage) {
-        System.out.println("Create MenuTab");
+    public MenuTab(VBox root, Stage stage) {
+
+        HBox menubox = new HBox();
 
         MenuBar menu = new MenuBar();
+
+        //root.setAlignment(Pos.TOP_CENTER);
+        this.setStyle("-fx-background-color : yellow");
+
         // Create Menu
         Menu mainMenu = new Menu("Menu");
         Menu editMenu = new Menu("Edit");
@@ -39,8 +46,10 @@ public class MenuTab extends HBox {
 
         menu.getMenus().addAll(mainMenu,editMenu,helpMenu);
         this.getChildren().add(menu);
-        root.setTop(menu);
+        menu.setStyle("-fx-border-color : black");
+        //root.setAlignment(Pos.TOP_CENTER);
 
+        // @refactoring function
         importFile.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
@@ -51,11 +60,14 @@ public class MenuTab extends HBox {
             }
         });
 
+        // @ refactoring function
         importDirectory.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle("load directory");
             File directoryPath = directoryChooser.showDialog(stage);
             FxFrontend.photoview.addImages(directoryPath);
         });
+
+        System.out.println("Create MenuTab");
     }
 }
