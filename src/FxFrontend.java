@@ -1,12 +1,15 @@
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class FxFrontend extends Application {
     public static Photoview photoview;
+   // public static MenuTab menu;
+  //  public static Filter filter;
+    public static Browser browser;
+    public static InfoBar info;
+    public static Top top;
 
     public static void main(String[] args) {
         launch(args);
@@ -17,6 +20,7 @@ public class FxFrontend extends Application {
         stage.setTitle("Photobook!");
         stage.setMaximized(true);
         BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color : #ffaadd");
         // root.setSpacing(5);
         // root.getChildren().setPadding(new Insets(5, 10 ,5, 10));
 
@@ -24,10 +28,13 @@ public class FxFrontend extends Application {
         stage.setTitle("Photobook");
         stage.setScene(scene);
 
-        MenuTab menuTab = new MenuTab(root, stage);
-        // FilterTab filterTab = new FilterTab(root);
-        // BrowserBar browserBar = new BrowserBar(root);
+        //menu = new MenuTab(root, stage);
+        //filter = new Filter(root);
+        browser = new Browser(root);
+        info = new InfoBar(root);
         photoview = new Photoview(root);
+        top = new Top(root, stage);
+
         stage.show();
     }
 }
