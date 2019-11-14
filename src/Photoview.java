@@ -10,9 +10,7 @@ public class Photoview extends GridPane {
 
     public Photoview () {
     }
-
     public Photoview(BorderPane root) {
-        System.out.println("Create Photoview");
         GridPane grid = new GridPane();
         root.getChildren().add(grid);
         root.setCenter(this);
@@ -23,6 +21,7 @@ public class Photoview extends GridPane {
         this.add(new ImageView(image), colIndex, rowIndex);
     }
 
+    // setFitWidth (buch.stage.getWidth
     public void addImages(File directoryPath) {
         File[] fileList = directoryPath.listFiles();
         if (fileList != null) {
@@ -41,5 +40,6 @@ public class Photoview extends GridPane {
                 }
             }
         }
+        System.out.println("Create Photoview");
     }
 }
