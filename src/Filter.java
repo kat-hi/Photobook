@@ -12,7 +12,7 @@ public class Filter extends HBox {
 
         HBox filter = new HBox();
         //root.setAlignment(Pos.BOTTOM_CENTER);
-        this.setStyle("-fx-background-color : red");
+        this.setStyle("-fx-background-color : DARKGRAY");
 
         Button button = new Button("Test");
         this.getChildren().add(button);
