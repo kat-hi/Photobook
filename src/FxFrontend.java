@@ -24,7 +24,7 @@ public class FxFrontend extends Application {
         }
     }
 
-    private static Logger filelog = Logger.getLogger("FxFrontend");
+   // private static Logger filelog = Logger.getLogger("FxFrontend");
 
     public static void main(String[] args) {
         launch(args);
@@ -32,19 +32,17 @@ public class FxFrontend extends Application {
 
     @Override
     public void start(Stage stage) {
-        DBController.connect();
-        filelog.addHandler(handler);
+        //DBController.connect();
+    //    filelog.addHandler(handler);
         stage.setTitle("Photobook!");
         stage.setMaximized(true);
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color : LIGHTGRAY");
-
         Scene scene = new Scene(root, 800, 600);
-        filelog.info(filelog.getName() + ": scene created");
+    //    filelog.info(filelog.getName() + ": scene created");
         stage.setTitle("Photobook");
         stage.setScene(scene);
+        root.setStyle("-fx-background-color : GRAY");
 
-        //menu = new MenuTab(stage);
         browser = new Browser(root);
         info = new InfoBar(root);
         photoview = new Photoview(root);

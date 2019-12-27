@@ -1,63 +1,58 @@
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.*;
+
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import java.util.*;
 
-public class Photoview extends GridPane {
-    private static final Set<String> EXTENSIONS = new HashSet<>(Arrays.asList("jpg", "png"));
+public class Photoview extends TilePane {
     private static DropShadow clickColor = new DropShadow();
-    private static List<File> filelist;
+    private static ImageView imageClicked = null;
+    public static BorderPane root;
+    public static ArrayList<LoadedImage> currentImages;
     private static Logger filelog = Logger.getLogger("Photoview");
 
-    public Photoview () {
+    public Photoview() {
+
     }
 
     public Photoview(BorderPane root) {
-        filelog.addHandler((FxFrontend.handler));
-
-        GridPane grid = new GridPane();
-        HBox hbox = new HBox();
-        hbox.setAlignment(Pos.BASELINE_RIGHT);
+        currentImages = new ArrayList<LoadedImage>();
+        filelog.addHandler(FxFrontend.handler);
         this.setVgap(10);
         this.setHgap(10);
-        root.setCenter(this);
+        //root.setCenter(this);
         this.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(grid);
+        this.setPadding(new Insets(30,0,20,0));
+        ScrollPane s1 = new ScrollPane();
+        s1.setPrefSize(120, 120);
+        s1.setContent(this);
+        s1.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        s1.setFitToWidth(true);
+        root.setCenter(s1);
+        root.setStyle("-fx-background-color: GRAY");
     }
 
     public void addImages(List<File> files) {
-        filelist = new ArrayList<>(files);
-        //String[] splittedFileName;
 
         int colIndex = 0;
         int rowIndex = 0;
-        for(File file : filelist) {
-            String filepath = file.getPath();
-            Image image = new Image("file:" + filepath, 250, 200, false, true, true);
-            ImageView imageview = new ImageView(image);
-            selectImage(imageview);
-            //imageview.setId(image.getPath()); // later
-            // splittedFileName = filename.split(".");
-            // if(EXTENSIONS.contains(splittedFileName[0])) {
-            this.add(imageview, colIndex, rowIndex);
+        for(File file : files) {
+            LoadedImage lm = new LoadedImage(file);
+            lm.setCol(colIndex);
+            lm.setRow(rowIndex);
+            ImageView im = lm.getImageView();
+            this.getChildren().add(im);
+            currentImages.add(lm);
 
             colIndex += 1;
             if (colIndex == 4) {
@@ -65,10 +60,6 @@ public class Photoview extends GridPane {
                 colIndex = 0;
             }
         }
-    }
-
-    private void selectImage(ImageView imageview) {
-        imageview.addEventHandler(MouseEvent.MOUSE_MOVED, (event) -> imageview.setEffect(clickColor));
-        imageview.addEventHandler(MouseEvent.MOUSE_EXITED, (event) -> imageview.setEffect(null));
+        Browser.showLoadedFiles();
     }
 }

@@ -1,3 +1,4 @@
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -29,10 +30,15 @@ public class MenuTab extends HBox {
     public MenuTab(VBox root, Stage stage) {
         filelog.addHandler((FxFrontend.handler));
 
-        HBox menubox = new HBox();
+       // HBox menubox = new HBox();
+
         MenuBar menu = new MenuBar();
+        menu.setStyle("-fx-background-color: GRAY;" +
+                "-fx-focus-color: RED;");
+        menu.setPadding(new Insets(20,0,15,0));
+
         this.setStyle("-fx-min-height: 30px; " +
-                "-fx-background-color : DARKGRAY");
+                "-fx-background-color : GRAY");
         // Create Menu
         Menu mainMenu = new Menu("File");
         Menu editMenu = new Menu("Edit");
@@ -40,7 +46,7 @@ public class MenuTab extends HBox {
         Menu toolMenu = new Menu("Tools");
         Menu helpMenu = new Menu("Help");
 
-        mainMenu.setStyle("-fx-min-width: 80px;");
+        mainMenu.setStyle("-fx-min-width: 80px; -fx-focus-color: RED");
         editMenu.setStyle("-fx-min-width: 80px;");
         viewMenu.setStyle("-fx-min-width: 80px;");
         toolMenu.setStyle("-fx-min-width: 80px;");
