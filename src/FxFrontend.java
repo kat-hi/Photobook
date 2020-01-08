@@ -1,47 +1,59 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+
 import java.util.logging.*;
 
+/**
+ * This class launches the application and declares classes used to build this photobook frontend.
+ */
 public class FxFrontend extends Application {
+    private static Logger filelog = Logger.getLogger(FxFrontend.class.getName());
     public static Photoview photoview;
-    //public static MenuTab menu;
     public static Browser browser;
     public static InfoBar info;
     public static Top top;
-    public static Handler handler;
+    public static Handler filehandler;
+    public static BorderPane root;
 
-    static {
+    /**
+     * This method is called when the FxApplication is started.
+     * launch is a method of the application-class that extends FxFrontend
+     *
+     * @param args can be used for commandline arguments if needed
+     */
+    public static void main(String[] args) {
         try {
-            handler = new FileHandler("log.txt");
+            filehandler = new FileHandler("log.txt");
+            //  fh.setLevel(Level.ALL);
+            filehandler.setFormatter(new SimpleFormatter());
         } catch (IOException e) {
             e.printStackTrace();
+            filelog.log(Level.SEVERE, "File logger not working.", e);
         }
-    }
-
-   // private static Logger filelog = Logger.getLogger("FxFrontend");
-
-    public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * This method starts this application and is used to set up general attributes for the main window.
+     * It instantiates objects - browser, info, photoview, top - used to create the layout.
+     *
+     * @param stage JavaFx runtime creates a stage object for starting this application.
+     *              this object is needed to display all visual parts of this application
+     *
+     */
     @Override
     public void start(Stage stage) {
-        //DBController.connect();
-    //    filelog.addHandler(handler);
-        stage.setTitle("Photobook!");
+        filelog.addHandler(filehandler);
         stage.setMaximized(true);
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
+        root.setStyle("-fx-background-color : SLATEGREY");
         Scene scene = new Scene(root, 800, 600);
-    //    filelog.info(filelog.getName() + ": scene created");
+        filelog.info(filelog.getName() + ": scene created");
         stage.setTitle("Photobook");
         stage.setScene(scene);
-        root.setStyle("-fx-background-color : GRAY");
 
         browser = new Browser(root);
         info = new InfoBar(root);

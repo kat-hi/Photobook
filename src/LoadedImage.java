@@ -7,31 +7,38 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.File;
 
+/**
+ * This class is great. It simplifies the whole file handling and photo loading by collecting all necessary attributes of a file.
+ * It provides the name of a foto, its File object, its imageView object, its image object and its position in the photoview grid given by row and column
+ */
 public class LoadedImage {
 
     private String name;
-    private double filesize;
     private File loadedFile;
     private ImageView loadedImageview;
     private Image image;
-    private int col;
-    private int row;
-    private String title;
-    private String fileName;
+    private String filepath;
+    public static ImageView currentImage;
 
     private static DropShadow clickColor = new DropShadow();
     private static ImageView imageClicked;
     private static Boolean imageClickedChecker = Boolean.FALSE;
 
-
+    /**
+     * default constructor of loadedImage class
+     */
     public LoadedImage() {
     }
 
+    /**
+     * Constructor of loadedImage class with a file parameter. Every loadedImage gets two eventlistener that listens on one-clickEvents or double-clickEvents
+     * @param loadedFile this file object will be provided by the fileChooser or DirectoryChoose in MenuTab.class
+     */
     public LoadedImage(File loadedFile) {
             this.loadedFile = loadedFile;
-            this.fileName = loadedFile.getPath();
+            this.filepath = loadedFile.getPath();
             this.name = loadedFile.getName();
-            this.image = new Image("file:" + this.fileName, 500, 500, true, true, true);
+            this.image = new Image("file:" + this.filepath, 200, 200, true, true, true);
             this.loadedImageview = new ImageView(image);
             this.loadedImageview.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
                 this.handleMouseClicked();
@@ -45,21 +52,25 @@ public class LoadedImage {
             });
     }
 
+    /**
+     * @return returns the ImageView of the object on which the getter-method is called
+     */
     public ImageView getImageView() {
         return this.loadedImageview;
     }
 
+    /**
+     * @return returns the name of the object on which the getter-method is called
+     */
     public String getName() {
         return this.name;
     }
 
-    public void setRow(int row)  {
-        this.row = row;
-    }
+    /**
+     * this method is called when the eventlistener detects an one-clickEvent. If there is an imagesClicked its
+     * effect is set to null and the new image gets a bordershadow that marks its selection.
+     */
 
-    public void setCol(int col) {
-        this.col = col;
-    }
     private void handleMouseClicked() {
         if(imageClickedChecker) {
             imageClicked.setEffect(null);
@@ -67,64 +78,20 @@ public class LoadedImage {
         this.loadedImageview.setEffect(clickColor);
         imageClickedChecker = Boolean.TRUE;
         imageClicked = this.loadedImageview;
-        InfoBar.showDetails(this.fileName);
+        InfoBar.showExifDetails(this.filepath);
     }
 
+    /**
+     * this method is called when the eventlistener detects a double-clickEvent.
+     */
     private void handleMouseDoubleClicked() {
-        this.image = new Image("file:" + this.fileName, 600, 700, true, true, true);
+        this.image = new Image("file:" + this.filepath, 600, 600,
+                true, true, true);
         this.loadedImageview = new ImageView(this.image);
         this.loadedImageview.setFitWidth(-1);
         this.loadedImageview.setFitHeight(-1);
         this.loadedImageview.setPreserveRatio(true);
-        Photoview.root.setCenter(this.loadedImageview);
+        currentImage = this.loadedImageview;
+        FxFrontend.root.setCenter(this.loadedImageview);
     }
-
-    /*
-
-    private void selectImage(String filepath) {
-        this.loadedImageview.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
-            this.handleMouseClicked();
-            this.loadedImageview.setEffect(clickColor);
-            InfoBar.showDetails(this.loadedImageview.getId());
-        });
-        this.loadedImageview.addEventHandler(MouseEvent.MOUSE_EXITED, (event) -> {
-            this.loadedImageview.setEffect(null);
-        });
-
-        //single click event to show dropshadow and Infobar
-        this.loadedImageview.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
-            //  System.out.println("imageClicked:" + imageClicked);
-            //  System.out.println("imageview" + im);
-
-            //imageClicked.setEffect(null);
-            this.loadedImageview.setEffect(clickColor);
-            //InfoBar.showDetails(this.loadedImageview.getId());
-            //imageClicked = this.loadedImageview;
-
-
-         if(!imageClicked.getId().equals(im.getId())) {
-                System.out.println("test");
-               imageClicked.setEffect(null);
-               imageClicked = im;
-               imageClicked.setEffect(clickColor);
-         }
-
-        });
-
-        //double click even to show single image view
-        this.loadedImageview.setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                if(mouseEvent.getClickCount() == 2) {
-                    Image img = new Image("file:" + filepath, 600, 700, true, true, true);
-                    ImageView single = new ImageView(img);
-                    single.setFitWidth(-1);
-                    single.setFitHeight(-1);
-                    single.setPreserveRatio(true);
-                    Photoview.root.setCenter(single);
-                }
-            }
-        });
-    }
-
-    */
 }
